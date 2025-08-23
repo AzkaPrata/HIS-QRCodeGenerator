@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QR Code Generator For HIS</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: linear-gradient(to right, #0f172a, #1e293b); /* Navy gradient */
+    }
+    .fade-in {
+      animation: fadeIn 1s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+  <script type="text/javascript" src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
+</head>
+<body class="min-h-screen flex items-center justify-center text-white px-4">
+  <div class="bg-white/10 backdrop-blur-md p-8 rounded-lg shadow-lg w-full max-w-md fade-in">
+    <h1 class="text-2xl font-bold mb-6 text-center text-blue-300">QR Code Generator</h1>
+    
+    <form id="qrForm" class="space-y-4">
+      <div>
+        <label class="block mb-1 text-sm text-blue-200">URL</label>
+        <input type="url" id="urlInput" placeholder="https://contoh.com"
+          class="w-full bg-white/20 rounded px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500 transition duration-300" required />
+      </div>
+
+      <div class="flex justify-between space-x-2">
+        <button type="submit"
+          class="flex-1 bg-blue-700 hover:bg-blue-800 transition-all duration-300 px-4 py-2 rounded shadow hover:scale-105">Buat</button>
+        <button type="button" id="downloadBtn"
+          class="flex-1 bg-blue-500 hover:bg-blue-600 transition-all duration-300 px-4 py-2 rounded shadow hover:scale-105">Download</button>
+      </div>
+    </form>
+
+    <div id="qrCodeContainer" class="mt-6 text-center mx-auto fade-in">
+      <div id="canvas" class="mx-auto"></div>
+    </div>
+    <div id="footer" class="w-full mt-10">
+      <div class="bg-white/10 backdrop-blur-md p-6 rounded-lg shadow-md text-white max-w-md mx-auto">
+        <h2 class="text-xl font-bold mb-4 text-blue-200">Note:</h2>
+        <ul class="list-disc list-inside space-y-1">
+          <li>Buat QR dengan memasukan link, dengan format "https://"</li>
+          <li>Refresh apabila ingin membuat QR baru</li>
+          <li>QR Khusus untuk Hadana Islamic School</li>
+          <li>Hanya bisa diakses melalui Laptop/Komputer</li>
+        </ul>
+      </div>
+      
+    </div>
+  </div>
+  <script type="text/javascript">
+    const form = document.getElementById('qrForm');
+    const urlInput = document.getElementById('urlInput');
+    const sizeInput = document.getElementById('sizeInput');
+    const imageInput = document.getElementById('imageInput');
+    const canvas = document.getElementById('qrCanvas');
+    const qrCodeContainer = document.getElementById('qrCodeContainer');
+    const downloadBtn = document.getElementById('downloadBtn');
+    let qrCode;
+    const url = urlInput.value
+    form.addEventListener('submit', (e)=>{
+      e.preventDefault()
+      qrCode = new QRCodeStyling({
+        width: 300,
+        height: 300,
+        type: "svg",
+        data: urlInput.value,
+        image: "./logo hi school circle.png",
+        margin: 4,
+        dotsOptions: {
+            color: "#000000",
+            type: "rounded",
+            roundSize:true
+        },
+        backgroundOptions: {
+            color: "#ffffff",
+        },
+        imageOptions: {
+            crossOrigin: "anonymous",
+            margin: 10
+        },
+        cornersSquareOptions: {
+          type: "square"
+        }
+    });
+
+    qrCode.append(document.getElementById("canvas"));
+    })
+
+    downloadBtn.addEventListener("click", ()=>{
+      const currentYear = new Date().getFullYear();
+      let num = Math.floor(Math.random()*99999) + 1
+      console.log(num)
+      qrCode.download({name:"QRHIS-"+num+currentYear, extension:"png"})
+    })
+    setInterval(()=>{
+      const svg = document.querySelector('svg')
+      svg.classList.add("mx-auto")
+    }, 1000)
+</script>
+</body>
+</html>
